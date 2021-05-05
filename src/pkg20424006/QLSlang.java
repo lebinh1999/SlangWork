@@ -9,8 +9,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -22,8 +24,9 @@ import java.util.stream.IntStream;
  * @author Le Duc Binh
  */
 public class QLSlang {
+
     private List<SlangGroup> lstGroup;
-     
+
 //    Hàm đoc Slang
     public void readSlangFile(String filePath) throws FileNotFoundException, IOException, InterruptedException {
         lstGroup = new LinkedList<SlangGroup>();
@@ -36,14 +39,13 @@ public class QLSlang {
 
                 List<String> defsList = new LinkedList<String>();
 
-               // nếu ls[1] có kí hiệu |
-                
+                // nếu ls[1] có kí hiệu |
                 if (ls[1].contains("|")) {
                     String[] defs = ls[1].split("\\|");
                     for (String s : defs) {
                         defsList.add(s);
                     }
-                }   // nếu ls[1] không có kí hiệu này
+                } // nếu ls[1] không có kí hiệu này
                 else {
                     defsList.add(ls[1]);
                 }
@@ -73,14 +75,14 @@ public class QLSlang {
         } // tim thay group
         else {
             SlangGroup group = lstGroup.get(group_index);
-           // phải loại trùng trong trường hợp có từ trùng
+            // phải loại trùng trong trường hợp có từ trùng
             int iS = findDuplicate(word, group_index);
             if (iS == -1) {
                 group.getLstSlang().add(new Slang(word, defs, group.getLstSlang().size() - 1)); // không tìm thấy trùng
             } else {
                 // trong trường hợp này đầu tiên ta sẽ thêm một nhóm nghĩa vào từ cũ
                 Slang sNew = group.getLstSlang().get(iS);
-              // dùng addAll để add thêm một nhóm nghĩa mới
+                // dùng addAll để add thêm một nhóm nghĩa mới
                 sNew.getNghia().addAll(defs);
                 group.getLstSlang().set(iS, sNew);
                 //set lại group
@@ -88,6 +90,7 @@ public class QLSlang {
             }
         }
     }
+
     // tìm 1 group trong 1 nhóm group
     public int findGroup(char type) {
         return IntStream.range(0, lstGroup.size())
@@ -95,16 +98,9 @@ public class QLSlang {
                 .findFirst()
                 .orElse(-1);
     }
-//    public Slang findDefinitionBySlangWord(String key){
-//        return lstGroup.stream()
-//                .parallel()
-//                .filter(p -> p.getGroupType().equals(key.charAt(0)))).findFirst().orElse(null);
-//    }
-//   
-//    
     // hàm này giúp tìm từ trùng trong phạm vi 1 group
-			// trả về -1 nghĩa là không có từ nào trùng
-			// ngược lại thì trả về vị trí của slang đó trong nhóm
+    // trả về -1 nghĩa là không có từ nào trùng
+    // ngược lại thì trả về vị trí của slang đó trong nhóm
 
     public int findDuplicate(String word, int group_index) {
         Slang s = lstGroup.get(group_index).getLstSlang().stream().parallel().filter(w -> w.getKey().equals(word)).findFirst().orElse(null);
@@ -113,6 +109,17 @@ public class QLSlang {
         }
         return s.getIndex();
     }
+
+//    public void WriteFile(String filePath) throws FileNotFoundException, IOException {
+//        File file = new File(filePath);
+//        if (!file.exists()) {
+//            file.createNewFile();
+//        }
+//        FileOutputStream fos = new FileOutputStream(file);
+//        ObjectOutputStream out = new ObjectOutputStream(fos);
+//        out.writeObject(lstGroup);
+//        out.close();
+//    }
 
     public List<SlangGroup> getLstGroup() {
         return lstGroup;

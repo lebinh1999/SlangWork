@@ -53,18 +53,18 @@ public class Slang implements Serializable {
         }
     }
 
-    public void inputSlang(Scanner scanner, int index) {
-        System.out.print("Nháº­p Tá»« Slang:");
-        String s;
+    public void Inputconfirm(Scanner scanner, int index) {
+        System.out.print("Nhập từ cần thêm:");
+        String Add;
         key = scanner.nextLine();
         nghia = new LinkedList<String>();
         while (true) {
-            System.out.print("Nhập nghĩa Của Từ(Nhấn N hoặc n để thoát):");
-            s = scanner.nextLine();
-            if (s.equals("N") || s.equals("n")) {
+            System.out.print("Nhập nghĩa Của Từ(Nhấn Exit hoặc exit để thoát):");
+            Add = scanner.nextLine();
+            if (Add.equals("Exit") || Add.equals("exit")) {
                 break;
             }
-            nghia.add(s);
+            nghia.add(Add);
 
         }
         this.index = index;

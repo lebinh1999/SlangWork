@@ -5,7 +5,11 @@
  */
 package pkg20424006;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +25,57 @@ public class Main {
      * @param args the command line arguments
      */
 //    private static boolean check = true;
-    public final String source = "../20424006/src/pkg20424006/";
-    public final String Slang = source + "slang.txt";
+    static final String source = "../20424006/src/pkg20424006/";
+    static final String NewSlang = source + "Newslang.txt";
+    public static ArrayList<String> history = new ArrayList<String>();
+    
+    
+      public static void saveHistory(String fileName) {
+        try {
+            File file = new File(fileName);
+            FileWriter fileWriter = new FileWriter(file);
 
+            for (String str : history) {
+                fileWriter.write(str + "\n");
+            }
+
+            fileWriter.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //read data from history variable and write down that data to history.txt file 
+    public static ArrayList<String> readHistory(String fileName) {
+        ArrayList<String> history = new ArrayList<String>();
+
+        try {
+            File file = new File(fileName);
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                history.add(line);
+            }
+
+            fileReader.close();
+            bufferedReader.close();
+
+        } catch (Exception ex) {
+            System.out.println("Something goes wrong: " + ex);
+        }
+
+        return history;
+    }
     public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
         // TODO code application logic here
         Scanner sc = new Scanner(System.in);
         QLSlang QL = new QLSlang();
         SlangGroup SG = new SlangGroup();
         QL.readSlangFile("../20424006/src/pkg20424006/slang.txt");
+//        QL.WriteFile(NewSlang);
 //        for (SlangGroup g : QL.getLstGroup()) {
 //
 //            System.out.println(g.getGroupType());
@@ -58,6 +104,7 @@ public class Main {
                     System.out.print("Nhập từ khóa keywork để tìm kiếm :\n");
                     String key = sc.nextLine();
                     Slang s = SG.findBySlangWord(key);
+                    history.add(key);
                     if (s != null) {
                         System.out.println("=====SLANG WORD====");
                         for (String str : s.getNghia()) {
@@ -80,6 +127,23 @@ public class Main {
                         System.out.println("Không thể tìm thấy nghĩa cần tìm");
                     }
                     break;
+                    
+                case 3 :
+                     System.out.print("History: ");
+                     System.out.println(history.toString());
+                    break;
+                    
+                case 4:
+                    Slang SLadd =  new Slang();
+                    SLadd.Inputconfirm(sc, QL.getLstGroup().size());
+                    System.out.println("Từ đã bị commit bạn có muốn thêm");
+                    System.out.println("|   YES          CANCEL   |");
+                    System.out.print("Câu trả lời của bạn:");
+                    String confirm = sc.nextLine();
+                    if(confirm.equals("Exit"))
+                            break;
+//                    QL.addGroup(SLadd, NewSlang);
+                    break;             
                 default:
                     break;
             }
