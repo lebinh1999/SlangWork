@@ -95,8 +95,13 @@ public class QLSlang {
                 .findFirst()
                 .orElse(-1);
     }
-   
-    
+//    public Slang findDefinitionBySlangWord(String key){
+//        return lstGroup.stream()
+//                .parallel()
+//                .filter(p -> p.getGroupType().equals(key.charAt(0)))).findFirst().orElse(null);
+//    }
+//   
+//    
     // hàm này giúp tìm từ trùng trong phạm vi 1 group
 			// trả về -1 nghĩa là không có từ nào trùng
 			// ngược lại thì trả về vị trí của slang đó trong nhóm
